@@ -5,7 +5,7 @@
 %% 1A)
 % Recursive Temporal Filter
 % Compute the impulse response at t = 100
-deltaT = 1;         % Time constant, ms
+deltaT = 1;         %Time constant, ms
 duration = 1000;    % ms
 
 % Initialize arrays
@@ -205,7 +205,7 @@ for t = 1:length(ts)
 end
 
 
-figure(7);
+figure(4);
 plot(f1); hold on; plot(f2);hold off;
 
 
@@ -299,7 +299,7 @@ for tt = 1:length(t)
 end
 
 %% 3a)
-figure(8);
+figure(5);
 
 subplot(2, 2, 3);
 imagesc(squeeze(f1_even(round(length(x)/2), :, :))');
@@ -324,7 +324,7 @@ leftOdd = -f2_odd + f1_even;
 rightEven = -f1_odd + f2_even;
 rightOdd = f2_odd + f1_even;
 
-figure(9);
+figure(6);
 
 subplot(2, 2, 1);
 imagesc(squeeze(leftEven(round(length(x)/2), :, :))');
@@ -347,7 +347,7 @@ title("Right Odd"); xlabel("Visual angle (deg)"); ylabel("Time (ms)");
 leftEnergy = leftEven .^2 + leftOdd.^2;
 rightEnergy = rightEven .^ 2 + rightOdd.^2;
 
-figure(10);
+figure(7);
 subplot(1, 2, 1);
 imagesc(squeeze(leftEnergy(round(length(x)/2), :, :))');
 title("Left Energy"); xlabel("Visual angle (deg)"); ylabel("Time (ms)");
@@ -408,27 +408,27 @@ end
 
 %Uncomment below to play movie of the four stimuli
 
-figure(11);
-
-for tt = 1:length(t)
-    subplot(2, 2, 1);
-    imagesc(drift_up(:, :, tt));
-    title("Up");
-
-    subplot(2, 2, 2);
-    imagesc(drift_down(:, :, tt));
-    title("Down");
-
-    subplot(2, 2, 3);
-    imagesc(drift_left(:, :, tt));
-    title("Left");
-
-    subplot(2, 2, 4);
-    imagesc(drift_right(:, :, tt));
-    title("Right"); 
-    
-    pause(0.001);
-end
+% figure(8);
+% 
+% for tt = 1:length(t)
+%     subplot(2, 2, 1);
+%     imagesc(drift_up(:, :, tt));
+%     title("Up");
+% 
+%     subplot(2, 2, 2);
+%     imagesc(drift_down(:, :, tt));
+%     title("Down");
+% 
+%     subplot(2, 2, 3);
+%     imagesc(drift_left(:, :, tt));
+%     title("Left");
+% 
+%     subplot(2, 2, 4);
+%     imagesc(drift_right(:, :, tt));
+%     title("Right"); 
+%     
+%     pause(0.001);
+% end
 
 %% 3d) Drift Left
 tau = 25;
@@ -899,7 +899,7 @@ for c=1:length(contrasts)
 end
 
 %% Plotting
-figure(15);
+figure(13);
 plot(contrasts, rightEnergy_byContrast);
 hold on;
 plot(contrasts, leftEnergy_byContrast);
@@ -909,7 +909,7 @@ set(gca, 'XScale', 'log')
 
 hold off; title("Average energy response as a function of contrast");
 legend("Right", "Left", "Up", "Down"); xlabel("Contrast (%)");
-ylim([0 1]); ylabel("Avg. Energy Response")
+ylabel("Avg. Energy Response")
 
 
 %% 4b)
@@ -951,7 +951,7 @@ for c=1:length(contrasts)
     f2_even_t = zeros(size(stim));
     f2_odd_t = zeros(size(stim));
 
-    stim = (drift_right .* contrast) + (drift_up .* contrast);
+    stim = (drift_right .* contrast) + (drift_up .* 50);
     
     for tt = 1:length(t)
         deltaY1 = (deltaT / tau) * (-y1 + stim(:, :, tt)); y1 = y1 + deltaY1;
@@ -1004,9 +1004,9 @@ for c=1:length(contrasts)
 end
 
 %% Plotting
-figure(16);
+figure(14);
 subplot(2, 2, 1);
-plot(contrasts, rightEnergy_byContrast(1:length(contrasts)), '-o', 'Color', 'blue');
+plot(contrasts, rightEnergy_byContrast_Right, '-o', 'Color', 'blue');
 hold on; set(gca, 'XScale', 'log'); 
 plot(contrasts, rightEnergy_byContrast_UpRight, ':x', 'Color', 'blue');
 hold off; title("Rightwards Selective");
@@ -1014,7 +1014,7 @@ ylim([0 1]); ylabel("Avg. Energy Response");
 xlabel("Contrast (%)"); legend("Right", "Up + Right")
 
 subplot(2, 2, 2);
-plot(contrasts, leftEnergy_byContrast(1:length(contrasts)),'-o', 'Color', 'red');
+plot(contrasts, leftEnergy_byContrast_Right,'-o', 'Color', 'red');
 hold on; set(gca, 'XScale', 'log'); 
 plot(contrasts, leftEnergy_byContrast_UpRight, ':x', 'Color', 'red');
 hold off; title("Leftwards Selective");
@@ -1022,7 +1022,7 @@ ylim([0 1]); ylabel("Avg. Energy Response");
 xlabel("Contrast (%)"); legend(["Right" "Up + Right"])
 
 subplot(2, 2, 3);
-plot(contrasts, upEnergy_byContrast(1:length(contrasts)), '-o', 'Color', 'magenta');
+plot(contrasts, upEnergy_byContrast_Right, '-o', 'Color', 'magenta');
 hold on; set(gca, 'XScale', 'log'); 
 plot(contrasts, upEnergy_byContrast_UpRight, ':x', 'Color', 'magenta');
 hold off; title("Upwards Selective");
@@ -1030,9 +1030,11 @@ ylim([0 1]); ylabel("Avg. Energy Response");
 xlabel("Contrast (%)"); legend("Right", "Up + Right")
 
 subplot(2, 2, 4);
-plot(contrasts, downEnergy_byContrast(1:length(contrasts)), '-o', 'Color', 'green');
+plot(contrasts, downEnergy_byContrast_Right, '-o', 'Color', 'green');
 hold on; set(gca, 'XScale', 'log'); 
 plot(contrasts, downEnergy_byContrast_UpRight, ':x', 'Color', 'green');
 hold off; title("Downwards Selective");
 ylim([0 1]); ylabel("Avg. Energy Response");  
 xlabel("Contrast (%)"); legend("Right", "Up + Right")
+
+
